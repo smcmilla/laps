@@ -56,22 +56,6 @@
         .resizer-h:hover {
             background-color: #777; /* Lighter gray on hover */
         }
-
-        /* Custom Tooltip */
-        .custom-tooltip {
-            position: fixed; /* Position relative to the viewport */
-            background-color: #333;
-            color: #fff;
-            padding: 6px 10px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            white-space: nowrap;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.2s ease-in-out;
-            pointer-events: none; /* Allows clicks to pass through */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        }
     </style>
 </head>
 <body class="p-2 bg-black min-h-screen flex justify-center items-center">
@@ -79,7 +63,7 @@
     <div id="main-container" class="flex w-[98%] min-h-[700px] bg-black rounded-xl shadow-2xl overflow-hidden" style="height: 95vh;">
 
         <!-- Left Pane: ViewNavGlobal -->
-        <div id="view-nav-global" class="flex flex-col flex-shrink-0 bg-black border-r border-gray-700 component-area" title="ViewNavGlobal: Global navigation for Events, Cars, and Drivers.">
+        <div id="view-nav-global" class="flex flex-col flex-shrink-0 bg-black border-r border-gray-700" style="width: 250px;">
             <div class="flex flex-col h-full">
                 <div class="flex justify-between items-center p-2 border-b border-gray-700">
                     <h2 class="text-sm-tight font-semibold text-white">Navigation</h2>
@@ -146,14 +130,13 @@
                     <p>&copy; F1 Team Management App</p>
                 </div>
             </div>
-            <div class="custom-tooltip">ViewNavGlobal: Global navigation for Events, Cars, and Drivers.</div>
         </div>
 
         <!-- Resizable Vertical Separator -->
         <div id="main-vertical-resizer" class="resizer-v flex-shrink-0"></div>
 
         <!-- Right Pane: WsSession Component -->
-        <div id="ws-session-component" class="flex-grow p-4 flex flex-col overflow-hidden bg-black component-area" title="WsSession: Main workspace for managing a racing session.">
+        <div id="ws-session-component" class="flex-grow p-4 flex flex-col overflow-hidden bg-black">
             <h2 class="text-lg font-bold text-white mb-3">Session: Example Session Name (FP1)</h2>
 
             <!-- WsSession's Tabs Navigation -->
@@ -183,7 +166,7 @@
                 <!-- Left Column: Split into VwLapNav (60%) and Dynamic Bottom Component (40%) -->
                 <div class="flex flex-col w-full md:w-1/3 p-2 bg-black rounded-lg shadow-md border border-gray-700">
                     <!-- Top Section: VwLapNav -->
-                    <div id="vw-lap-nav-container" class="flex flex-col component-area" title="VwNavLap: List of laps for the current session, with single and multi-select options.">
+                    <div id="vw-lap-nav-container" class="flex flex-col" style="height: 60%;">
                         <h3 class="text-sm-tight font-semibold text-white mb-2">Laps for this Session</h3>
                         <div class="flex justify-between items-center mb-2">
                             <label class="flex items-center text-xs-tight text-gray-300">
@@ -191,35 +174,19 @@
                             </label>
                             <span id="selectedLapCount" class="text-xs-tight text-gray-400">0 Laps Selected</span>
                         </div>
-                        <div class="flex-grow overflow-y-auto scrollbar-thin mb-3 space-y-0.5">
-                            <!-- VwLapNav Mockup -->
-                            <button class="lap-item w-full text-left p-1 rounded-md transition-colors duration-150 bg-black text-gray-200 border border-gray-600 hover:bg-gray-900 text-xs-tight flex items-center">
-                                <input type="checkbox" class="lap-checkbox mr-2" data-lap-id="lap1"> Lap 1 - Time: 01:23.456
-                            </button>
-                            <button class="lap-item w-full text-left p-1 rounded-md transition-colors duration-150 bg-black text-gray-200 border border-gray-600 hover:bg-gray-900 text-xs-tight flex items-center">
-                                <input type="checkbox" class="lap-checkbox mr-2" data-lap-id="lap2"> Lap 2 - Time: 01:24.123
-                            </button>
-                            <button class="lap-item w-full text-left p-1 rounded-md transition-colors duration-150 bg-black text-gray-200 border border-gray-600 hover:bg-gray-900 text-xs-tight flex items-center">
-                                <input type="checkbox" class="lap-checkbox mr-2" data-lap-id="lap3"> Lap 3 - Time: 01:23.987
-                            </button>
-                            <button class="lap-item w-full text-left p-1 rounded-md transition-colors duration-150 bg-black text-gray-200 border border-gray-600 hover:bg-gray-900 text-xs-tight flex items-center">
-                                <input type="checkbox" class="lap-checkbox mr-2" data-lap-id="lap4"> Lap 4 - Time: 01:25.001
-                            </button>
-                            <button class="lap-item w-full text-left p-1 rounded-md transition-colors duration-150 bg-black text-gray-200 border border-gray-600 hover:bg-gray-900 text-xs-tight flex items-center">
-                                <input type="checkbox" class="lap-checkbox mr-2" data-lap-id="lap5"> Lap 5 - Time: 01:23.789
-                            </button>
-                            <button class="w-full text-left p-1 rounded-md transition-colors duration-150 bg-gray-800 text-white hover:bg-gray-700 mt-2 text-xs-tight border border-gray-600">
-                                + Add New Lap
-                            </button>
+                        <div id="lap-items-container" class="flex-grow overflow-y-auto scrollbar-thin mb-3 space-y-0.5">
+                            <!-- Lap items will be dynamically inserted here by JavaScript -->
                         </div>
-                        <div class="custom-tooltip">VwNavLap: List of laps for the current session, with single and multi-select options.</div>
+                        <button class="w-full text-left p-1 rounded-md transition-colors duration-150 bg-gray-800 text-white hover:bg-gray-700 mt-2 text-xs-tight border border-gray-600">
+                            + Add New Lap
+                        </button>
                     </div>
 
                     <!-- Resizable Horizontal Separator -->
                     <div id="left-horizontal-resizer" class="resizer-h flex-shrink-0"></div>
 
                     <!-- Bottom Section: Dynamic Bottom Left Component Area -->
-                    <div id="dynamicLeftBottom" class="flex-shrink-0 mt-auto component-area" title="VwLapNewConfig: Quickly set common car parameters for a new lap/run.">
+                    <div id="dynamicLeftBottom" class="flex-shrink-0 mt-auto">
                         <!-- VwLapNewConfig (Default) -->
                         <div id="vwLapNewConfig" class="p-3 bg-black rounded-lg shadow-inner text-xs-tight border border-gray-600 h-full overflow-y-auto scrollbar-thin">
                             <h3 class="text-sm-tight font-semibold text-white mb-2">New Lap Configuration</h3>
@@ -250,7 +217,7 @@
                         </div>
 
                         <!-- VwDriversList (Hidden by default) -->
-                        <div id="vwDriversList" class="p-3 bg-black rounded-lg shadow-inner text-xs-tight border border-gray-600 hidden h-full overflow-y-auto scrollbar-thin" title="VwDriversList: Displays drivers associated with the current session.">
+                        <div id="vwDriversList" class="p-3 bg-black rounded-lg shadow-inner text-xs-tight border border-gray-600 hidden h-full overflow-y-auto scrollbar-thin">
                             <h3 class="text-sm-tight font-semibold text-white mb-2">Session Drivers</h3>
                             <ul class="space-y-1 text-gray-300">
                                 <li>- Max Verstappen (Active)</li>
@@ -263,7 +230,7 @@
                         </div>
 
                         <!-- VwCarList (Hidden by default) -->
-                        <div id="vwCarList" class="p-3 bg-black rounded-lg shadow-inner text-xs-tight border border-gray-600 hidden h-full overflow-y-auto scrollbar-thin" title="VwCarList: Displays cars associated with the current session.">
+                        <div id="vwCarList" class="p-3 bg-black rounded-lg shadow-inner text-xs-tight border border-gray-600 hidden h-full overflow-y-auto scrollbar-thin">
                             <h3 class="text-sm-tight font-semibold text-white mb-2">Session Cars</h3>
                             <ul class="space-y-1 text-gray-300">
                                 <li>- Red Bull RB20 (Active)</li>
@@ -276,7 +243,7 @@
                         </div>
 
                         <!-- VwLapChartList (Hidden by default) -->
-                        <div id="vwLapChartList" class="p-3 bg-black rounded-lg shadow-inner text-xs-tight border border-gray-600 hidden h-full overflow-y-auto scrollbar-thin" title="VwLapChartList: Overview of available analytical charts for the session.">
+                        <div id="vwLapChartList" class="p-3 bg-black rounded-lg shadow-inner text-xs-tight border border-gray-600 hidden h-full overflow-y-auto scrollbar-thin">
                             <h3 class="text-sm-tight font-semibold text-white mb-2">Lap Charts Overview</h3>
                             <ul class="space-y-1 text-gray-300">
                                 <li>- Lap Time Distribution</li>
@@ -287,15 +254,14 @@
                             </ul>
                             <p class="text-gray-500 text-xs-tight mt-3">(This is a placeholder for VwLapChartList content)</p>
                         </div>
-                        <div class="custom-tooltip"></div> <!-- Placeholder for dynamic tooltip -->
                     </div>
                 </div>
 
                 <!-- Right Column: Tab Content Area -->
-                <div class="flex flex-col w-full md:w-2/3 p-2 bg-black rounded-lg shadow-md border border-gray-700 component-area" title="WsSession Right Column: Displays detailed content based on selected tab.">
+                <div class="flex flex-col w-full md:w-2/3 p-2 bg-black rounded-lg shadow-md border border-gray-700">
                     <div class="flex-grow bg-black rounded-lg p-3 overflow-y-auto scrollbar-thin border border-gray-700" id="wsSessionTabContent">
                         <!-- Tab Content: Summary (Default) -->
-                        <div id="tabContent-summary" class="tab-content component-area" title="VwSessionHeader: Displays high-level session information.">
+                        <div id="tabContent-summary" class="tab-content">
                             <h4 class="text-sm-tight font-semibold text-white mb-2">Session Summary (VwSessionHeader)</h4>
                             <p class="text-gray-300 text-xs-tight">
                                 This area displays high-level information about the session: date, track, weather conditions, session type (FP1, Quali, Race), etc.
@@ -309,60 +275,141 @@
                             <div class="mt-3 p-2 bg-gray-900 rounded-md text-gray-300 text-xs-tight border border-gray-700">
                                 (Placeholder for VwSessionHeader content)
                             </div>
-                            <div class="custom-tooltip">VwSessionHeader: Displays high-level session information.</div>
                         </div>
 
-                        <!-- Tab Content: Params (Hidden by default - First Iteration Structure) -->
-                        <div id="tabContent-params" class="tab-content hidden component-area" title="Params Tab: Comprehensive view and detailed editor for all car parameters.">
+                        <!-- Tab Content: Params (Hidden by default) -->
+                        <div id="tabContent-params" class="tab-content hidden">
                             <h4 class="text-sm-tight font-semibold text-white mb-2">Car Parameters</h4>
                             <p class="text-gray-300 text-xs-tight mb-3">
-                                This tab displays the exact values of all 150+ car parameters for the selected lap.
+                                This tab displays the exact values of all 150+ car parameters for the selected lap(s).
                             </p>
-                            <div class="p-3 bg-black rounded-lg shadow-inner text-xs-tight border border-gray-600 h-full overflow-y-auto scrollbar-thin">
-                                <h5 class="text-sm-tight font-semibold text-white mb-2">All Car Parameters (Mock Data)</h5>
-                                <div class="grid grid-cols-2 gap-1.5">
-                                    <!-- Mock parameters, similar to VwLapParamSingle -->
-                                    <div class="font-medium text-gray-300">Front Wing Angle:</div>
-                                    <input type="number" value="8.0" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
-                                    <div class="font-medium text-gray-300">Rear Wing Angle:</div>
-                                    <input type="number" value="10.5" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
-                                    <div class="font-medium text-gray-300">Front Spring Rate:</div>
-                                    <input type="number" value="1200" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
-                                    <div class="font-medium text-gray-300">Rear Spring Rate:</div>
-                                    <input type="number" value="1000" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
-                                    <div class="font-medium text-gray-300">Front Camber (L):</div>
-                                    <input type="number" value="-3.5" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
-                                    <div class="font-medium text-gray-300">Front Camber (R):</div>
-                                    <input type="number" value="-3.5" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
-                                    <div class="font-medium text-gray-300">Rear Camber (L):</div>
-                                    <input type="number" value="-2.0" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
-                                    <div class="font-medium text-gray-300">Rear Camber (R):</div>
-                                    <input type="number" value="-2.0" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
-                                    <div class="font-medium text-gray-300">Brake Bias:</div>
-                                    <input type="number" value="55.0" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
-                                    <div class="font-medium text-gray-300">Differential Preload:</div>
-                                    <input type="number" value="60" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
-                                    <div class="font-medium text-gray-300">Ride Height Front:</div>
-                                    <input type="number" value="50" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
-                                    <div class="font-medium text-gray-300">Ride Height Rear:</div>
-                                    <input type="number" value="65" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
-                                    <div class="font-medium text-gray-300">Fuel Load (Start):</div>
-                                    <input type="number" value="100" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
-                                    <div class="font-medium text-gray-300">Engine Map:</div>
-                                    <select class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
-                                        <option>Quali</option><option>Race</option><option>Practice</option>
-                                    </select>
-                                    <!-- ... (imagine 130+ more parameters here) ... -->
-                                </div>
-                                <button class="w-full py-1.5 mt-3 rounded-md transition-colors duration-150 bg-gray-800 hover:bg-gray-700 text-white text-xs-tight border border-gray-600">
-                                    Save Parameters
+
+                            <!-- Params Sub-Tabs Navigation -->
+                            <div class="flex border-b border-gray-700 mb-3" id="paramsSubTabs">
+                                <button data-sub-tab="view" class="params-sub-tab-button px-3 py-1 text-xs-tight font-medium rounded-t-lg transition-colors duration-150 bg-gray-700 text-white border border-gray-700 border-b-0">
+                                    View Parameters
+                                </button>
+                                <button data-sub-tab="compare" class="params-sub-tab-button px-3 py-1 text-xs-tight font-medium rounded-t-lg transition-colors duration-150 text-gray-400 hover:bg-gray-800 hover:text-white border border-gray-700 border-b-0">
+                                    Compare Parameters
+                                </button>
+                                <button data-sub-tab="history" class="params-sub-tab-button px-3 py-1 text-xs-tight font-medium rounded-t-lg transition-colors duration-150 text-gray-400 hover:bg-gray-800 hover:text-white border border-gray-700 border-b-0">
+                                    History
                                 </button>
                             </div>
-                            <div class="custom-tooltip">Params Tab: Comprehensive view and detailed editor for all car parameters.</div>
+
+                            <!-- Params Sub-Tabs Content -->
+                            <div id="param-view-container" class="h-full">
+                                <!-- VwLapParamSingle (Mock) -->
+                                <div id="paramsSubTab-view" class="params-sub-tab-content p-3 bg-black rounded-lg shadow-inner text-xs-tight border border-gray-600 h-full overflow-y-auto scrollbar-thin">
+                                    <h5 class="text-sm-tight font-semibold text-white mb-2">Parameters for Selected Lap (Lap 1)</h5>
+                                    <p class="text-gray-400 text-xs-tight mb-3">
+                                        This section allows viewing and editing of all detailed parameters for a single selected lap.
+                                    </p>
+                                    <div class="grid grid-cols-2 gap-1.5">
+                                        <div class="font-medium text-gray-300">Front Wing Angle:</div>
+                                        <input type="number" value="8.0" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
+                                        <div class="font-medium text-gray-300">Rear Wing Angle:</div>
+                                        <input type="number" value="10.5" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
+                                        <div class="font-medium text-gray-300">Front Spring Rate:</div>
+                                        <input type="number" value="1200" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
+                                        <div class="font-medium text-gray-300">Rear Spring Rate:</div>
+                                        <input type="number" value="1000" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
+                                        <div class="font-medium text-gray-300">Front Camber (L):</div>
+                                        <input type="number" value="-3.5" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
+                                        <div class="font-medium text-gray-300">Front Camber (R):</div>
+                                        <input type="number" value="-3.5" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
+                                        <div class="font-medium text-gray-300">Rear Camber (L):</div>
+                                        <input type="number" value="-2.0" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
+                                        <div class="font-medium text-gray-300">Rear Camber (R):</div>
+                                        <input type="number" value="-2.0" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
+                                        <div class="font-medium text-gray-300">Brake Bias:</div>
+                                        <input type="number" value="55.0" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
+                                        <div class="font-medium text-gray-300">Differential Preload:</div>
+                                        <input type="number" value="60" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
+                                        <div class="font-medium text-gray-300">Ride Height Front:</div>
+                                        <input type="number" value="50" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
+                                        <div class="font-medium text-gray-300">Ride Height Rear:</div>
+                                        <input type="number" value="65" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
+                                        <div class="font-medium text-gray-300">Fuel Load (Start):</div>
+                                        <input type="number" value="100" class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
+                                        <div class="font-medium text-gray-300">Engine Map:</div>
+                                        <select class="w-full p-0.5 rounded-sm bg-gray-900 text-white border border-gray-700 text-xs-tight">
+                                            <option>Quali</option><option>Race</option><option>Practice</option>
+                                        </select>
+                                        <!-- ... (imagine 130+ more parameters here) ... -->
+                                    </div>
+                                    <button class="w-full py-1.5 mt-3 rounded-md transition-colors duration-150 bg-gray-800 hover:bg-gray-700 text-white text-xs-tight border border-gray-600">
+                                        Save Parameters
+                                    </button>
+                                </div>
+
+                                <!-- VwLapParamMulti (Mock - hidden by default) -->
+                                <div id="paramsSubTab-compare" class="params-sub-tab-content p-3 bg-black rounded-lg shadow-inner text-xs-tight border border-gray-600 h-full overflow-y-auto scrollbar-thin hidden">
+                                    <h5 class="text-sm-tight font-semibold text-white mb-2">Parameter Comparison for Selected Laps</h5>
+                                    <p class="text-gray-400 text-xs-tight mb-3">
+                                        Compare specific parameter values across multiple selected laps to identify setup changes or differences.
+                                    </p>
+                                    <table class="w-full text-left table-fixed border-collapse">
+                                        <thead class="bg-gray-800 sticky top-0 z-10">
+                                            <tr>
+                                                <th class="py-1 px-1 text-xs font-bold text-gray-300 uppercase tracking-wider border border-gray-700 w-1/3">Parameter</th>
+                                                <th class="py-1 px-1 text-xs font-bold text-gray-300 uppercase tracking-wider border border-gray-700 w-1/3">Lap 1</th>
+                                                <th class="py-1 px-1 text-xs font-bold text-gray-300 uppercase tracking-wider border border-gray-700 w-1/3">Lap 3</th>
+                                                <th class="py-1 px-1 text-xs font-bold text-gray-300 uppercase tracking-wider border border-gray-700 w-1/3">Lap 5</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="border-b border-gray-800">
+                                                <td class="py-1 px-1 text-xs text-gray-300 border border-gray-800">Front Wing Angle</td>
+                                                <td class="py-1 px-1 text-xs text-white border border-gray-800">8.0</td>
+                                                <td class="py-1 px-1 text-xs text-white border border-gray-800 bg-gray-900">8.5</td>
+                                                <td class="py-1 px-1 text-xs text-white border border-gray-800">8.5</td>
+                                            </tr>
+                                            <tr class="border-b border-gray-800">
+                                                <td class="py-1 px-1 text-xs text-gray-300 border border-gray-800">Rear Wing Angle</td>
+                                                <td class="py-1 px-1 text-xs text-white border border-gray-800">10.5</td>
+                                                <td class="py-1 px-1 text-xs text-white border border-gray-800">10.5</td>
+                                                <td class="py-1 px-1 text-xs text-white border border-gray-800 bg-gray-900">11.0</td>
+                                            </tr>
+                                            <tr class="border-b border-gray-800">
+                                                <td class="py-1 px-1 text-xs text-gray-300 border border-gray-800">Brake Bias</td>
+                                                <td class="py-1 px-1 text-xs text-white border border-gray-800">55.0</td>
+                                                <td class="py-1 px-1 text-xs text-white border border-gray-800 bg-gray-900">54.5</td>
+                                                <td class="py-1 px-1 text-xs text-white border border-gray-800">54.5</td>
+                                            </tr>
+                                            <!-- Add more rows for other parameters -->
+                                        </tbody>
+                                    </table>
+                                    <p class="text-gray-500 text-xs-tight mt-3">(Differences highlighted in darker gray. This is a placeholder for VwLapParamMulti content with 150+ settings)</p>
+                                </div>
+
+                                <!-- VwLapParamHistory (Mock - hidden by default) -->
+                                <div id="paramsSubTab-history" class="params-sub-tab-content p-3 bg-black rounded-lg shadow-inner text-xs-tight border border-gray-600 h-full overflow-y-auto scrollbar-thin hidden">
+                                    <h5 class="text-sm-tight font-semibold text-white mb-2">Parameter Change History</h5>
+                                    <p class="text-gray-400 text-xs-tight mb-3">
+                                        Review a chronological log of all parameter adjustments made during the session.
+                                    </p>
+                                    <ul class="space-y-2 text-gray-300">
+                                        <li><span class="font-semibold text-gray-200">[Lap 1, 09:00:00]</span> Session Start: Front Wing 8.0, Rear Wing 10.5, Brake Bias 55.0</li>
+                                        <li><span class="font-semibold text-gray-200">[Lap 3, 09:15:30]</span> Front Wing changed from 8.0 to 8.5</li>
+                                        <li><span class="font-semibold text-gray-200">[Lap 5, 09:30:15]</span> Rear Wing changed from 10.5 to 11.0</li>
+                                        <li><span class="font-semibold text-gray-200">[Lap 8, 09:45:00]</span> Tire Compound changed to Medium</li>
+                                        <li><span class="font-semibold text-gray-200">[Lap 12, 10:05:45]</span> Brake Bias changed from 54.5 to 54.0 (in-lap adjustment)</li>
+                                    </ul>
+                                    <p class="text-gray-500 text-xs-tight mt-3">(This is a placeholder for VwLapParamHistory content)</p>
+                                </div>
+
+                                <!-- No Laps Selected Message for Params Tab -->
+                                <div id="params-no-lap-selected" class="text-center text-gray-400 py-8 h-full flex flex-col justify-center items-center hidden">
+                                    <p class="mb-2">Select a lap (or multiple laps) from the left panel to view its parameters.</p>
+                                    <p class="text-xs-tight text-gray-500">For single lap details and editing, select one lap.</p>
+                                    <p class="text-xs-tight text-gray-500">For side-by-side comparison, select multiple laps.</p>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Tab Content: Parts (Hidden by default) -->
-                        <div id="tabContent-parts" class="tab-content hidden component-area" title="Parts Tab: Displays physical car components, their status, and inventory.">
+                        <div id="tabContent-parts" class="tab-content hidden">
                             <h4 class="text-sm-tight font-semibold text-white mb-2">Car Parts & Inventory</h4>
                             <p class="text-gray-300 text-xs-tight">
                                 This area displays a table or list of the car's physical parts/components, their status, mileage, serial numbers, or last service dates.
@@ -376,11 +423,10 @@
                             <div class="mt-3 p-2 bg-gray-900 rounded-md text-gray-300 text-xs-tight border border-gray-700">
                                 (Placeholder for VwSessionPartsTable content)
                             </div>
-                            <div class="custom-tooltip">Parts Tab: Displays physical car components, their status, and inventory.</div>
                         </div>
 
                         <!-- Tab Content: Driver (Hidden by default) -->
-                        <div id="tabContent-driver" class="tab-content hidden component-area" title="VwSessionDriverDetails: Detailed information about the selected driver.">
+                        <div id="tabContent-driver" class="tab-content hidden">
                             <h4 class="text-sm-tight font-semibold text-white mb-2">Session Driver Details (VwSessionDriverDetails)</h4>
                             <p class="text-gray-300 text-xs-tight">
                                 This tab shows details about the driver(s) assigned to this specific session.
@@ -395,11 +441,10 @@
                             <div class="mt-3 p-2 bg-gray-900 rounded-md text-gray-300 text-xs-tight border border-gray-700">
                                 (Placeholder for VwSessionDriverDetails content)
                             </div>
-                            <div class="custom-tooltip">VwSessionDriverDetails: Detailed information about the selected driver.</div>
                         </div>
 
                         <!-- Tab Content: Car (Hidden by default) -->
-                        <div id="tabContent-car" class="tab-content hidden component-area" title="VwSessionCarDetails: Detailed information about the selected car.">
+                        <div id="tabContent-car" class="tab-content hidden">
                             <h4 class="text-sm-tight font-semibold text-white mb-2">Session Car Details (VwSessionCarDetails)</h4>
                             <p class="text-gray-300 text-xs-tight">
                                 This tab shows details about the specific car used in this session.
@@ -414,11 +459,10 @@
                             <div class="mt-3 p-2 bg-gray-900 rounded-md text-gray-300 text-xs-tight border border-gray-700">
                                 (Placeholder for VwSessionCarDetails content)
                             </div>
-                            <div class="custom-tooltip">VwSessionCarDetails: Detailed information about the selected car.</div>
                         </div>
 
                         <!-- Tab Content: Analytics (Hidden by default) -->
-                        <div id="tabContent-analytics" class="tab-content hidden component-area" title="Analytics Tab: Visualizes telemetry data and performance metrics for selected laps/entities.">
+                        <div id="tabContent-analytics" class="tab-content hidden">
                             <h4 class="text-sm-tight font-semibold text-white mb-2">Session-Wide Analytics</h4>
                             <p class="text-gray-300 text-xs-tight">
                                 This tab contains overall analytical charts for laps, car, and driver performance within this session. It will adapt to show data for multiple selected laps from the left panel.
@@ -433,10 +477,8 @@
                             <div class="mt-3 p-2 bg-gray-900 rounded-md text-gray-300 text-xs-tight border border-gray-700">
                                 (Placeholder for VwSessionOverallLapChart, VwSessionCarPerformanceChart, VwSessionDriverPerformanceChart components)
                             </div>
-                            <div class="custom-tooltip">Analytics Tab: Visualizes telemetry data and performance metrics for selected laps/entities.</div>
                         </div>
                     </div>
-                    <div class="custom-tooltip">WsSession Right Column: Displays detailed content based on selected tab.</div>
                 </div>
             </div>
         </div>
@@ -446,6 +488,7 @@
         $(document).ready(function() {
             // --- Global State Variables ---
             let selectedLapIds = [];
+            let activeParamsSubTab = 'view'; // Default sub-tab for Params
             const lapItems = [
                 { id: 'lap1', label: 'Lap 1 - Time: 01:23.456' },
                 { id: 'lap2', label: 'Lap 2 - Time: 01:24.123' },
@@ -454,20 +497,39 @@
                 { id: 'lap5', label: 'Lap 5 - Time: 01:23.789' }
             ];
 
-            // --- Tab Switching Logic ---
+            // --- Tab Switching Logic (Main Tabs) ---
             function showTab(tabId) {
-                // Hide all tab contents
+                // Hide all main tab contents
                 $('.tab-content').hide();
-                // Show the selected tab content
+                // Show the selected main tab content
                 $('#tabContent-' + tabId).show();
 
-                // Remove active class from all tab buttons
+                // Remove active class from all main tab buttons
                 $('.tab-button').removeClass('bg-gray-700 text-white border-gray-700').addClass('text-gray-400 hover:bg-gray-800 hover:text-white border-gray-700');
-                // Add active class to the clicked tab button
+                // Add active class to the clicked main tab button
                 $(`.tab-button[data-tab="${tabId}"]`).removeClass('text-gray-400 hover:bg-gray-800 hover:text-white').addClass('bg-gray-700 text-white border-gray-700');
 
                 // Update dynamic left-bottom component
                 swapLeftBottomComponent(tabId);
+
+                // If Params tab is activated, update its content based on lap selection
+                if (tabId === 'params') {
+                    updateParamsTabContent();
+                }
+            }
+
+            // --- Params Sub-Tab Switching Logic ---
+            function showParamsSubTab(subTabId) {
+                activeParamsSubTab = subTabId; // Update the state
+                $('.params-sub-tab-content').hide(); // Hide all sub-tab contents
+                $('#' + subTabId).show(); // Show the selected sub-tab content
+
+                // Update active class for sub-tab buttons
+                $('.params-sub-tab-button').removeClass('bg-gray-700 text-white border-gray-700').addClass('text-gray-400 hover:bg-gray-800 hover:text-white border-gray-700');
+                $(`.params-sub-tab-button[data-sub-tab="${subTabId}"]`).removeClass('text-gray-400 hover:bg-gray-800 hover:text-white').addClass('bg-gray-700 text-white border-gray-700');
+
+                // No need to call updateParamsTabContent here, as it's called by showTab
+                // and the sub-tab content is directly shown/hidden.
             }
 
             // --- Dynamic Left-Bottom Component Switching ---
@@ -476,17 +538,13 @@
 
                 if (tabId === 'driver') {
                     $('#vwDriversList').show();
-                    $('#dynamicLeftBottom').attr('title', 'VwDriversList: Displays drivers associated with the current session.');
                 } else if (tabId === 'car') {
                     $('#vwCarList').show();
-                    $('#dynamicLeftBottom').attr('title', 'VwCarList: Displays cars associated with the current session.');
                 } else if (tabId === 'analytics') {
                     $('#vwLapChartList').show();
-                    $('#dynamicLeftBottom').attr('title', 'VwLapChartList: Overview of available analytical charts for the session.');
                 } else {
                     // Default for Summary, Params, Parts, etc.
                     $('#vwLapNewConfig').show();
-                    $('#dynamicLeftBottom').attr('title', 'VwLapNewConfig: Quickly set common car parameters for a new lap/run.');
                 }
             }
 
@@ -497,19 +555,37 @@
 
             function updateLapItemStyling() {
                 $('.lap-item').each(function() {
-                    const lapId = $(this).find('.lap-checkbox').data('lap-id');
+                    const lapId = $(this).data('lap-id'); // Use data-lap-id from button
+                    const checkbox = $(this).find('.lap-checkbox');
+
                     if (selectedLapIds.includes(lapId)) {
                         $(this).removeClass('bg-black text-gray-200 border-gray-600 hover:bg-gray-900').addClass('bg-gray-800 text-white border-gray-400');
+                        checkbox.prop('checked', true);
                     } else {
                         $(this).removeClass('bg-gray-800 text-white border-gray-400').addClass('bg-black text-gray-200 border-gray-600 hover:bg-gray-900');
+                        checkbox.prop('checked', false);
                     }
+                });
+            }
+
+            // Function to dynamically render lap items
+            function renderLapItems() {
+                const container = $('#lap-items-container');
+                container.empty(); // Clear existing items
+                lapItems.forEach(lap => {
+                    const lapButton = `
+                        <button class="lap-item w-full text-left p-1 rounded-md transition-colors duration-150 bg-black text-gray-200 border border-gray-600 hover:bg-gray-900 text-xs-tight flex items-center" data-lap-id="${lap.id}">
+                            <input type="checkbox" class="lap-checkbox mr-2" data-lap-id="${lap.id}"> ${lap.label}
+                        </button>
+                    `;
+                    container.append(lapButton);
                 });
             }
 
             // Handles both single-click and checkbox changes
             $('#vw-lap-nav-container').on('click', '.lap-item', function(e) {
                 const checkbox = $(this).find('.lap-checkbox');
-                const lapId = checkbox.data('lap-id');
+                const lapId = $(this).data('lap-id'); // Get lapId from the button
 
                 // If the click was directly on the checkbox, let its default behavior handle selection
                 if ($(e.target).is(checkbox)) {
@@ -530,12 +606,16 @@
                         // Single select this lap, deselect others
                         selectedLapIds = [lapId];
                         $('.lap-checkbox').prop('checked', false); // Deselect all other checkboxes
-                        checkbox.prop('checked', true);
+                        checkbox.prop('checked', true); // Select this one
                     }
                 }
 
                 updateSelectedLapCount();
                 updateLapItemStyling();
+                // If Params tab is active, update its content
+                if ($('#wsSessionTabs button[data-tab="params"]').hasClass('bg-gray-700')) {
+                    updateParamsTabContent();
+                }
             });
 
             $('#selectAllLaps').on('change', function() {
@@ -548,7 +628,66 @@
                 }
                 updateSelectedLapCount();
                 updateLapItemStyling();
+                if ($('#wsSessionTabs button[data-tab="params"]').hasClass('bg-gray-700')) {
+                    updateParamsTabContent();
+                }
             });
+
+            // --- Params Tab Content Logic (VwLapParamSingle vs VwLapParamMulti vs No Selection) ---
+            function updateParamsTabContent() {
+                const noLapSelectedMessage = $('#params-no-lap-selected');
+                const viewSubTab = $('#paramsSubTab-view');
+                const compareSubTab = $('#paramsSubTab-compare');
+                const historySubTab = $('#paramsSubTab-history');
+
+                // Hide all sub-tabs initially for re-evaluation
+                viewSubTab.hide();
+                compareSubTab.hide();
+                historySubTab.hide();
+                noLapSelectedMessage.hide();
+
+                if (selectedLapIds.length === 0) {
+                    noLapSelectedMessage.show();
+                } else if (selectedLapIds.length === 1) {
+                    // If single lap selected, show 'View Parameters' sub-tab
+                    viewSubTab.show();
+                    showParamsSubTab('paramsSubTab-view'); // Ensure button is active
+                    // Update mock data for VwLapParamSingle based on selectedLapIds[0] if needed
+                    viewSubTab.find('h5').text(`Parameters for Selected Lap (${lapItems.find(l => l.id === selectedLapIds[0]).label.split(' - ')[0]})`);
+                } else { // Multiple laps selected
+                    // If multiple laps selected, show 'Compare Parameters' sub-tab
+                    compareSubTab.show();
+                    showParamsSubTab('paramsSubTab-compare'); // Ensure button is active
+                    // Update mock data for VwLapParamMulti based on selectedLapIds
+                    let multiHeaders = '<th class="py-1 px-1 text-xs font-bold text-gray-300 uppercase tracking-wider border border-gray-700 w-1/3">Parameter</th>';
+                    selectedLapIds.forEach(lapId => {
+                        multiHeaders += `<th class="py-1 px-1 text-xs font-bold text-gray-300 uppercase tracking-wider border border-gray-700 w-1/3">${lapItems.find(l => l.id === lapId).label.split(' - ')[0]}</th>`;
+                    });
+                    $('#paramsSubTab-compare thead tr').html(multiHeaders);
+
+                    // Simple mock data for multi-param comparison (actual data would come from backend)
+                    let multiBody = '';
+                    const mockParams = [
+                        { name: 'Front Wing Angle', values: { lap1: '8.0', lap2: '8.5', lap3: '8.5', lap4: '8.0', lap5: '9.0' } },
+                        { name: 'Rear Wing Angle', values: { lap1: '10.5', lap2: '10.5', lap3: '11.0', lap4: '11.0', lap5: '11.5' } },
+                        { name: 'Brake Bias', values: { lap1: '55.0', lap2: '54.5', lap3: '54.5', lap4: '54.0', lap5: '54.0' } },
+                        { name: 'Tire Compound', values: { lap1: 'Soft', lap2: 'Soft', lap3: 'Medium', lap4: 'Medium', lap5: 'Hard' } },
+                    ];
+
+                    mockParams.forEach(param => {
+                        multiBody += `<tr class="border-b border-gray-800"><td class="py-1 px-1 text-xs text-gray-300 border border-gray-800">${param.name}</td>`;
+                        selectedLapIds.forEach((lapId, index) => {
+                            const value = param.values[lapId];
+                            // Highlight if different from the first selected lap's value
+                            const isDifferent = index > 0 && value !== param.values[selectedLapIds[0]];
+                            multiBody += `<td class="py-1 px-1 text-xs text-white border border-gray-800 ${isDifferent ? 'bg-gray-900' : ''}">${value}</td>`;
+                        });
+                        multiBody += '</tr>';
+                    });
+                    $('#paramsSubTab-compare tbody').html(multiBody);
+                }
+            }
+
 
             // --- Resizing Logic ---
             let isResizingV = false;
@@ -604,51 +743,27 @@
                 $('#main-container').css('cursor', 'default');
             });
 
-            // --- Tooltip Logic (Updated for right-click) ---
-            $('.component-area').each(function() {
-                const description = $(this).attr('title');
-                if (description) {
-                    $(this).append('<div class="custom-tooltip">' + description + '</div>');
-                    $(this).removeAttr('title'); // Remove native title to avoid double tooltips
-                }
-            });
-
-            // Show tooltip on right-click (contextmenu)
-            $('.component-area').on('contextmenu', function(e) {
-                e.preventDefault(); // Prevent default browser context menu
-
-                // Hide all other tooltips first
-                $('.custom-tooltip').css('opacity', '0');
-
-                const tooltip = $(this).find('.custom-tooltip');
-                if (tooltip.length) {
-                    // Position tooltip near the right-click coordinates
-                    tooltip.css({
-                        left: e.clientX + 'px',
-                        top: e.clientY + 'px',
-                        transform: 'translate(10px, 10px)', // Offset from cursor for better visibility
-                        opacity: '1'
-                    });
-                }
-            });
-
-            // Hide all tooltips on any click (left or right) outside of a tooltip
-            $(document).on('click', function(e) {
-                // Check if the click target or any of its parents is a custom-tooltip
-                if (!$(e.target).closest('.custom-tooltip').length) {
-                    $('.custom-tooltip').css('opacity', '0');
-                }
-            });
-
 
             // --- Initial Load ---
+            renderLapItems(); // Dynamically render lap items
             showTab('summary'); // Show summary tab by default
             updateSelectedLapCount(); // Initialize lap count
             updateLapItemStyling(); // Initialize lap item styling
 
+            // Event listener for main tab buttons
+            $('#wsSessionTabs').on('click', '.tab-button', function() {
+                showTab($(this).data('tab'));
+            });
+
+            // Event listener for Params sub-tab buttons
+            $('#paramsSubTabs').on('click', '.params-sub-tab-button', function() {
+                showParamsSubTab($(this).data('sub-tab'));
+            });
+
             // Event listener for "More Parameters" button
             $('#more-params-button').on('click', function() {
                 showTab('params'); // Switch to the Params tab
+                showParamsSubTab('paramsSubTab-view'); // Default to 'View Parameters' sub-tab
             });
 
             // Initial height distribution for left column
